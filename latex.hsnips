@@ -1,6 +1,7 @@
-global !p
-def math():
-	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+global
+function math(context) {
+    return context.scopes.some(s => s.startsWith("meta.math"));
+}
 endglobal
 
 snippet \it "item" Ab
@@ -31,12 +32,7 @@ endsnippet
 # Math
 
 snippet mk "Inline Math" wA
-$${1}$`!p
-if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
-    snip.rv = ' '
-else:
-    snip.rv = ''
-`$2
+\$$1\$$0
 endsnippet
 
 snippet md "Display Math" wA
@@ -45,329 +41,334 @@ $1
 .\] $0
 endsnippet
 
-context "math()"
-snippet '([A-Za-z])(\d)' "auto subscript" wrA
-`!p snip.rv = match.group(1)`_`!p snip.rv = match.group(2)`
+context math(context)
+snippet `([a-zA-Z])([0-9]+) ` "underset" A
+``if ( m[2].length == 1 ) { a = '_'; b = ' '; }
+  else { a = '_{'; b = '} '; }
+  rv = m[1] + a + m[2] + b``
 endsnippet
 
-context "math()"
-snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
-`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
-endsnippet
-
-context "math()"
+context math(context)
 snippet sq "^2" iA
 ^2
 endsnippet
 
-context "math()"
+context math(context)
 snippet cb "^3" iA
 ^3
 endsnippet
 
-context "math()"
+context math(context)
 snippet tp "superscript" iA
 ^{$1}$0
 endsnippet
 
-context "math()"
+context math(context)
 snippet // "Fraction" iA
 \\frac{$1}{$2}$0
 endsnippet
 
-context "math()"
-snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "Fraction" wrA
-\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+context math(context)
+snippet `((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/` "Fraction no ()" A
+\frac{``rv = m[1]``}{$1}$0
 endsnippet
 
-context "math()"
-snippet '^.*\)/' "() Fraction" wrA
-`!p
-stripped = match.string[:-1]
-depth = 0
-i = len(stripped) - 1
-while True:
-	if stripped[i] == ')': depth += 1
-	if stripped[i] == '(': depth -= 1
-	if depth == 0: break;
-	i -= 1
-snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
-`{$1}$0
+context math(context)
+snippet `^.*\)/` "Fraction with ()" A
+``
+    let str = m[0];
+    str = str.slice(0, -1);
+    let lastIndex = str.length - 1;
+
+    let depth = 0;
+    let i = str.length - 1;
+
+    while (true) {
+        if (str[i] == ')') depth += 1;
+        if (str[i] == '(') depth -= 1;
+        if (depth == 0) break;
+        i -= 1;
+    }
+
+    let results = str.slice(0, i) + "\\frac{" + str.slice(i+1, -1) + "}";
+    results += "{$1}$0";
+    rv = results;
+    ``
 endsnippet
 
-context "math()"
+context math(context)
 snippet "bar" "bar" riA
 \overline{$1}$0
 endsnippet
 
-context "math()"
+context math(context)
 snippet "([a-zA-Z])bar" "bar" riA
-\overline{`!p snip.rv=match.group(1)`}
+\overline{`` rv=match.group(1)``}
 endsnippet
 
-context "math()"
+context math(context)
 snippet "hat" "hat" riA
 \hat{$1}$0
 endsnippet
 
-context "math()"
+context math(context)
 snippet sum "sum" w
 \sum_{n=${1:1}}^{${2:\infty}} ${3:a_n z^n}
 endsnippet
 
-context "math()"
+context math(context)
 snippet lim "limit" w
 \lim_{${1:n} \to ${2:\infty}} 
 endsnippet
 
-context "math()"
+context math(context)
 snippet sq "\sqrt{}" iA
 \sqrt{${1:${VISUAL}}} $0
 endsnippet
 
-context "math()"
+context math(context)
 snippet lep "leq" iA
 \le 
 endsnippet
 
-context "math()"
+context math(context)
 snippet geq "geq" iA
 \ge 
 endsnippet
 
-context "math()"
+context math(context)
 snippet xnn "xn" iA
 x_{n}
 endsnippet
 
-context "math()"
+context math(context)
 snippet ynn "yn" iA
 y_{n}
 endsnippet
 
-context "math()"
+context math(context)
 snippet xii "xi" iA
 x_{i}
 endsnippet
 
-context "math()"
+context math(context)
 snippet yii "yi" iA
 y_{i}
 endsnippet
 
-context "math()"
+context math(context)
 snippet xp1 "x" iA
 x_{n+1}
 endsnippet
 
-context "math()"
+context math(context)
 snippet xnx "x_?" iA
 x_{$1}$0
 endsnippet
 
-context "math()"
+context math(context)
 snippet * "cdot" iA
 \cdot 
 endsnippet
 
-context "math()"
+context math(context)
 snippet dint "integral" wA
 \int_{${1:-\infty}}^{${2:\infty}} ${3:${VISUAL}} $0
 endsnippet
 
-context "math()"
+context math(context)
 snippet lrar "leftrightarrow" iA
 \leftrightarrow
 endsnippet
 
-context "math()"
+context math(context)
 snippet invs "inverse" iA
 ^{-1}
 endsnippet
 
-context "math()"
+context math(context)
 snippet tt "text" iA
 \text{$1}$0
 endsnippet
 
-context "math()"
+context math(context)
 snippet ra "rightarrow" iA
 \rightarrow
 endsnippet
 
 # Greek Latters
 
-context "math()"
+context math(context)
 snippet deg "degree" iA
 ^{\circ}
 endsnippet
 
-context "math()"
+context math(context)
 snippet Gamma"Gamma" iA
 \Gamma
 endsnippet
 
-context "math()"
+context math(context)
 snippet Delta "Delta" iA
 \Delta
 endsnippet
 
-context "math()"
+context math(context)
 snippet Lambda "Lambda" iA
 \Lambda
 endsnippet
 
-context "math()"
+context math(context)
 snippet Phi "Phi" iA
 \Phi
 endsnippet
 
-context "math()"
+context math(context)
 snippet Pi "Pi" iA
 \Pi
 endsnippet
 
-context "math()"
+context math(context)
 snippet Psi "Psi" iA
 \Psi
 endsnippet
 
-context "math()"
+context math(context)
 snippet Sigma "Sigma" iA
 \Sigma
 endsnippet
 
-context "math()"
+context math(context)
 snippet Theta "Theta" iA
 \Theta
 endsnippet
 
-context "math()"
+context math(context)
 snippet Epsilon "Upsilon" iA
 \Upsilon
 endsnippet
 
-context "math()"
+context math(context)
 snippet Xi "Xi" iA
 \Xi
 endsnippet
 
-context "math()"
+context math(context)
 snippet Omega "Omega" iA
 \Omega
 endsnippet
 
-context "math()"
+context math(context)
 snippet alpha "alpha" iA
 \alpha
 endsnippet
 
-context "math()"
+context math(context)
 snippet beta "beta" iA
 \beta
 endsnippet
 
-context "math()"
+context math(context)
 snippet gamma "gamma" iA
 \gamma
 endsnippet
 
-context "math()"
+context math(context)
 snippet delta "delta" iA
 \delta
 endsnippet
 
-context "math()"
+context math(context)
 snippet epsilon "epsilon" iA
 \epsilon
 endsnippet
 
-context "math()"
+context math(context)
 snippet zeta "zeta" iA
 \zeta
 endsnippet
 
-context "math()"
+context math(context)
 snippet eta "eta" iA
 \eta
 endsnippet
 
-context "math()"
+context math(context)
 snippet theta "theta" iA
 \theta
 endsnippet
 
-context "math()"
+context math(context)
 snippet iota "iota" iA
 \iota
 endsnippet
 
-context "math()"
+context math(context)
 snippet kappa "kappa" iA
 \kappa
 endsnippet
 
-context "math()"
+context math(context)
 snippet lambda "lambda" iA
 \lambda
 endsnippet
 
-context "math()"
+context math(context)
 snippet mu "mu" iA
 \mu
 endsnippet
 
-context "math()"
+context math(context)
 snippet nu "nu" iA
 \nu
 endsnippet
 
-context "math()"
+context math(context)
 snippet xi "xi" iA
 \xi
 endsnippet
 
-context "math()"
+context math(context)
 snippet pi "pi" iA
 \pi
 endsnippet
 
-context "math()"
+context math(context)
 snippet rho "rho" iA
 \rho
 endsnippet
 
-context "math()"
+context math(context)
 snippet sigma "sigma" iA
 \sigma
 endsnippet
 
-context "math()"
+context math(context)
 snippet tau "tau" iA
 \tau
 endsnippet
 
-context "math()"
+context math(context)
 snippet epsilon "upsilon" iA
 \upsilon
 endsnippet
 
-context "math()"
+context math(context)
 snippet phi "phi" iA
 \phi
 endsnippet
 
-context "math()"
+context math(context)
 snippet xi "chi" iA
 \chi
 endsnippet
 
-context "math()"
+context math(context)
 snippet psi "psi" iA
 \psi
 endsnippet
 
-context "math()"
+context math(context)
 snippet omega "omega" iA
 \omega
 endsnippet
