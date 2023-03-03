@@ -97,37 +97,52 @@ snippet `^.*\)/` "Fraction with ()" A
 endsnippet
 
 context math(context)
-snippet "bar" "bar" riA
-\overline{$1}$0
+snippet `\b([a-zA-Z])hat\b` "hat" iA
+``rv = '\\hat{' + m[1] + '}'``
 endsnippet
 
 context math(context)
-snippet "([a-zA-Z])bar" "bar" riA
-\overline{`` rv=match.group(1)``}
+snippet `\b([a-zA-Z])bar\b` "bar" iA
+``rv = '\\bar{' + m[1] + '}'``
 endsnippet
 
 context math(context)
-snippet "hat" "hat" riA
-\hat{$1}$0
+snippet `\b([a-zA-Z])tilde\b` "bar" iA
+``rv = '\\tilde{' + m[1] + '}'``
+endsnippet
+
+context math(context)
+snippet unbr "underbrace" iA
+\underbrace{$1}_{\text{$2}}$0
+endsnippet
+
+context math(context)
+snippet cbr "curlybracketr" iA
+\left.\begin{array} $1 \end{array}\right\} \begin{aligned} & $2 \end{aligned}
+endsnippet
+
+context math(context)
+snippet cbr "curlybracketl" iA
+\left\{\begin{array} $1 \end{array}\right. \begin{aligned} & $2 \end{aligned}
 endsnippet
 
 context math(context)
 snippet sum "sum" w
-\sum_{n=${1:1}}^{${2:\infty}} ${3:a_n z^n}
+\sum_{n=$1}^{$2} $3
 endsnippet
 
 context math(context)
 snippet lim "limit" w
-\lim_{${1:n} \to ${2:\infty}} 
+\lim_{$1 \to $2} 
 endsnippet
 
 context math(context)
-snippet sq "\sqrt{}" iA
-\sqrt{${1:${VISUAL}}} $0
+snippet rt "\sqrt{}" iA
+\sqrt{$1} $0
 endsnippet
 
 context math(context)
-snippet lep "leq" iA
+snippet le1 "leq" iA
 \le 
 endsnippet
 
