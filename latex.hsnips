@@ -122,7 +122,7 @@ snippet cbr "curlybracketr" iA
 endsnippet
 
 context math(context)
-snippet cbr "curlybracketl" iA
+snippet cbl "curlybracketl" iA
 \left\{\begin{array} $1 \end{array}\right. \begin{aligned} & $2 \end{aligned}
 endsnippet
 
