@@ -117,13 +117,13 @@ snippet unbr "underbrace" iA
 endsnippet
 
 context math(context)
-snippet cbr "curlybracketr" iA
-\left.\begin{array} $1 \end{array}\right\} \begin{aligned} & $2 \end{aligned}
+snippet cubr "curlybracketr" iA
+\left. $1 \right\} \begin{aligned} & $2 \end{aligned}
 endsnippet
 
 context math(context)
-snippet cbl "curlybracketl" iA
-\left\{\begin{array} $1 \end{array}\right. \begin{aligned} & $2 \end{aligned}
+snippet cubl "curlybracketl" iA
+\left\{ $1 \right. \begin{aligned} & $2 \end{aligned}
 endsnippet
 
 context math(context)
