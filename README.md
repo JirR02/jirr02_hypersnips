@@ -1,3 +1,3 @@
-# Hypersnip Snippets
+# Vsnip Snippets
 ***
 ## General
