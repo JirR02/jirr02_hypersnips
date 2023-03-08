@@ -42,6 +42,11 @@ $1
 endsnippet
 
 context math(context)
+snippet text "text" iA
+\text{$1}$0
+endsnippet
+
+context math(context)
 snippet `([a-zA-Z])([0-9]+) ` "underset" A
 ``if ( m[2].length == 1 ) { a = '_'; b = ' '; }
   else { a = '_{'; b = '} '; }
@@ -113,7 +118,7 @@ endsnippet
 
 context math(context)
 snippet unbr "underbrace" iA
-\underbrace{$1}_{\text{$2}}$0
+\underbrace{$1}_{}$0
 endsnippet
 
 context math(context)
@@ -387,3 +392,6 @@ context math(context)
 snippet omega "omega" iA
 \omega
 endsnippet
+
+# Chemistry
+
