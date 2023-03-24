@@ -1,7 +1,6 @@
-global
-function math(context) {
-    return context.scopes.some(s => s.startsWith("meta.math"));
-}
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 endglobal
 
 snippet \it "item" Ab
