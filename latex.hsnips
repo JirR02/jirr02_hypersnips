@@ -8,46 +8,41 @@ snippet \it "item" Ab
 \item $0
 endsnippet
 
-snippet `table([1-9]{1})\ ([1-9]{1})` "Table environment" bA
-\begin{table}[H]
-	\centering
-	\begin{tabular}{``
-	let len = m[2];
-	let results = "";
-	for(var i=0; i<len-1; i++){
-		results += "c|"
-	}
-	results += "c";
-	rv = results;
-	``}
-	    \toprule
-			``
-			let order = 1;
-			nrow = m[1];
-			ncol = m[2];
-			for (var i=0; i<nrow-1; i++){
-				for(var j = 0;j <ncol-1;j++){
-					rv += `${snip.tabstop(order+3)} & `;
-					order ++;
-				}	
-				rv += ` ${snip.tabstop(order+3)} \\\\`+ `\\`+ `\n`;
-				order ++;
-				if(i == 0){
-					rv += `		\\midrule` + `\n`;
-				}
-				rv += `			`;
-			}	
+snippet `table([1-9]{1})\ ([1-9]{1})` "Table environment" A
+\begin{tabular}{``
+let len = m[2];
+let results = "";
+for(var i=0; i<len-1; i++){
+	results += "c|"
+}
+results += "c";
+rv = results;
+``}
+	\toprule
+		``
+		let order = 1;
+		nrow = m[1];
+		ncol = m[2];
+		for (var i=0; i<nrow-1; i++){
 			for(var j = 0;j <ncol-1;j++){
 				rv += `${snip.tabstop(order+3)} & `;
 				order ++;
+			}	
+			rv += ` ${snip.tabstop(order+3)} \\\\`+ `\\`+ `\n`;
+			order ++;
+			if(i == 0){
+				rv += `		\\midrule` + `\n`;
 			}
-			rv += ` ${snip.tabstop(order+3)} \\\\` + `\\`;
-			``
-    	\bottomrule
-	\end{tabular}
-	\caption{${2:caption}}
-	\label{tab:${3:label}}
-\end{table}
+			rv += `		`;
+		}	
+		for(var j = 0;j <ncol-1;j++){
+			rv += `${snip.tabstop(order+3)} & `;
+			order ++;
+		}
+		rv += ` ${snip.tabstop(order+3)} \\\\` + `\\`;
+		``
+	\bottomrule
+\end{tabular}
 endsnippet
 
 snippet \pdf "Include PDF" Ab
@@ -68,7 +63,7 @@ endsnippet
 # Math
 
 context math(context)
-snippet `(b|p)mat([1-9]{1})\ ([1-9]{1})` "matrix" iwA
+snippet `(b|p|v)mat([1-9]{1})\ ([1-9]{1})` "matrix" iwA
 \begin{``rv = m[1]``matrix}``
 	let order = 1;
 	let nrow = m[2];
@@ -450,3 +445,46 @@ endsnippet
 
 # Chemistry
 
+snippet chemfig "chemfig" iA
+\chemfig{$1}$0
+endsnippet
+
+snippet chemfigl "chemfig with label" iA
+\chemfig{$1}{$2}$0
+endsnippet
+
+snippet sbnd "single bond" iA
+-
+endsnippet
+
+snippet dbnd "double bond" iA
+=
+endsnippet
+
+snippet tbnd "tripple bond" iA
+~
+endsnippet
+
+snippet asbnd "single bond" iA
+- [$1]$0
+endsnippet
+
+snippet adbnd "double bond" iA
+= [$1]$0
+endsnippet
+
+snippet atbnd "tripple bond" iA
+~ [$1]$0
+endsnippet
+
+snippet brn "branch" iA
+($1)$0
+endsnippet
+
+snippet `cyclo([1-9]{1})` "cyclo" iA
+*``rv = m[1]``($1)$0
+endsnippet
+
+snippet `ccyclo([1-9]{1})` "cyclo" iA
+C*``rv = m[1]``($1)$0
+endsnippet
