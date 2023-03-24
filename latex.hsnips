@@ -465,15 +465,15 @@ snippet tbnd "tripple bond" iA
 ~
 endsnippet
 
-snippet asbnd "single bond" iA
+snippet sabnd "single bond" iA
 - [$1]$0
 endsnippet
 
-snippet adbnd "double bond" iA
+snippet dabnd "double bond" iA
 = [$1]$0
 endsnippet
 
-snippet atbnd "tripple bond" iA
+snippet tabnd "tripple bond" iA
 ~ [$1]$0
 endsnippet
 
