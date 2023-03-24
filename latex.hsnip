@@ -1,16 +1,53 @@
-global !p
-def math():
-	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+global
+function math(context) {
+    return context.scopes.some(s => s.startsWith("meta.math"));
+}
 endglobal
 
 snippet \it "item" Ab
 \item $0
 endsnippet
 
-snippet table "table" b
-\begin{tabular}{$1}
-$0
-\end{tabular}
+snippet `table([1-9]{1})\ ([1-9]{1})` "Table environment" bA
+\begin{table}[H]
+	\centering
+	\begin{tabular}{``
+	let len = m[2];
+	let results = "";
+	for(var i=0; i<len-1; i++){
+		results += "c|"
+	}
+	results += "c";
+	rv = results;
+	``}
+	    \toprule
+			``
+			let order = 1;
+			nrow = m[1];
+			ncol = m[2];
+			for (var i=0; i<nrow-1; i++){
+				for(var j = 0;j <ncol-1;j++){
+					rv += `${snip.tabstop(order+3)} & `;
+					order ++;
+				}	
+				rv += ` ${snip.tabstop(order+3)} \\\\`+ `\\`+ `\n`;
+				order ++;
+				if(i == 0){
+					rv += `		\\midrule` + `\n`;
+				}
+				rv += `			`;
+			}	
+			for(var j = 0;j <ncol-1;j++){
+				rv += `${snip.tabstop(order+3)} & `;
+				order ++;
+			}
+			rv += ` ${snip.tabstop(order+3)} \\\\` + `\\`;
+			``
+    	\bottomrule
+	\end{tabular}
+	\caption{${2:caption}}
+	\label{tab:${3:label}}
+\end{table}
 endsnippet
 
 snippet \pdf "Include PDF" Ab
@@ -29,6 +66,25 @@ $0
 endsnippet
 
 # Math
+
+context math(context)
+snippet `(b|p)mat([1-9]{1})\ ([1-9]{1})` "matrix" iwA
+\begin{``rv = m[1]``matrix}``
+	let order = 1;
+	let nrow = m[2];
+	let ncol = m[3];
+	rv = `\n`;
+	for (var i=0; i<nrow; i++){
+		rv += '	';
+		for(var j = 0;j <ncol-1;j++){
+			rv += `${snip.tabstop(order)} & `;
+			order ++;
+		}
+		rv += ` ${snip.tabstop(order)} \\\\`+ `\\`+ `\n`;
+		order ++;
+	}
+	``\end{``rv = m[1]``matrix}$0
+endsnippet
 
 snippet mk "Inline Math" wA
 \$$1\$$0
